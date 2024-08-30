@@ -1,0 +1,125 @@
+<template>
+    <lightning-card title="Admin Suite" variant="Narrow" icon-name="standard:account">
+       
+        <lightning-input type="toggle"
+            slot="actions"
+            label="Use Static Resource"
+            onchange ={handleToggle}
+            checked= "{ToggleChecked}"
+            class="slds-m-right_xx-small slds-m-left_xx-large slds-m-top_xx-small">
+        </lightning-input>
+
+        <template if:true={useStaticResource}>
+            <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+                <lightning-input type="text" label="Static Resource For Remote Site Settings" name="staticResource" required onchange={handleFieldChange}></lightning-input>
+            </div>
+            <lightning-button variant="brand" label="Update" onclick={updateDataUsingCSV} class="slds-m-around_medium">
+            </lightning-button>
+        </template>
+        
+        <template if:false={useStaticResource}>
+            <lightning-combobox
+                name="metadataType"
+                class="slds-p-horizontal_medium"
+                label="Metadata Type"
+                value=""
+                placeholder="---Select Metadata Type---"
+                options={options}
+                onchange={handleChange}
+                required>
+            </lightning-combobox>
+
+            <div>
+                <p lwc:if={showLabel} class="slds-p-top_large slds-text-align_center slds-text-heading_medium">
+                    Please Fill the Following Fields to Update
+                </p>
+            </div>
+            
+            <template lwc:if={customLabel}>
+                <div class="slds-p-around_medium">
+                    <lightning-input type="text" label="Name" name="fullName" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Short Description" name="shortDescription" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Value" name="value" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="checkbox" label="Protected Component" name="protected_x" onchange={handleFieldChange}></lightning-input>
+                </div>
+            </template>
+
+            <template lwc:if={customMetadata}>
+                <div class="slds-p-around_medium">
+                    <lightning-input type="text" label="Custom Metadata Name" name="mdtName" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Custom Metadata Record Name" name="mdtRecName" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Record Label" name="label" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Field Name(Api Name of Field)" name="fieldName" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Value" name="value" required onchange={handleFieldChange}></lightning-input>
+                </div>
+            </template>
+
+            <template lwc:if={remoteSiteSetting}>
+                <div class="slds-p-around_medium">
+                    <lightning-input type="text" label="Remote Site Name" name="fullName" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Remote Site URL" name="url" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="checkbox" label="Disable Protocol Security" name="disableProtocolSecurity" onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="checkbox" label="Active" name="isActive" onchange={handleFieldChange}></lightning-input>
+                </div>
+            </template>
+
+            <template lwc:if={emailTemplate}>
+                <div class="slds-p-around_medium">
+                    <lightning-input type="text" label="Email Template Name" name="name" required onchange={handleFieldChange}></lightning-input>
+                    <!-- <lightning-input type="text" label="Folder" name="folderName" required onchange={handleFieldChange}></lightning-input> -->
+                    <lightning-input type="text" label="Template Unique Name" name="uniqueName" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-combobox
+                        name="encoding"
+                        label="Encoding"
+                        placeholder="---Select Encoding---"
+                        options={encodingOptions}
+                        onchange={handleFieldChange}
+                        required>
+                    </lightning-combobox>
+                    <lightning-combobox
+                        name="type"
+                        label="Type"
+                        placeholder="---Select Type---"
+                        options={emailTypeOptions}
+                        onchange={handleFieldChange}
+                        required>
+                    </lightning-combobox>
+                    <lightning-combobox lwc:if={showEmailStyle}
+                        name="style"
+                        label="Style"
+                        placeholder="---Select Style---"
+                        options={emailStyleOptions}
+                        onchange={handleFieldChange}
+                        required>
+                    </lightning-combobox>
+                    <lightning-input type="text" label="Email Body" name="content" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="checkbox" label="Available For Use" name="available" onchange={handleFieldChange}></lightning-input>
+                </div>
+            </template>
+
+            <template lwc:if={outboundMessage}>
+                <div class="slds-p-around_medium">
+                    <lightning-input type="text" label="Associated Object Name" name="objectName" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Name" name="name" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Unique Name" name="uniqueName" required onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="text" label="Endpoint URL" name="url" required onchange={handleFieldChange}></lightning-input>
+                    <!-- <lightning-input type="text" label="User to send as (Provide username)" name="integrationUser" required onchange={handleFieldChange}></lightning-input> -->
+                    <lightning-input type="checkbox" label="Send Session ID" name="includeSessionId" onchange={handleFieldChange}></lightning-input>
+                    <lightning-input type="checkbox" label="Protected Component" name="protected_x" onchange={handleFieldChange}></lightning-input>
+                </div>
+            </template>
+
+            <div lwc:if={showLabel}>
+                <lightning-button variant="brand" label="Update" name="update" onclick={handleUpdate} class="slds-m-around_medium">
+                </lightning-button>
+                <lightning-button variant="brand" label="Create" name="create" onclick={handleUpdate}>
+                </lightning-button>
+            </div>
+        </template>
+       
+        <div lwc:if={showSpinner}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </div>
+
+    </lightning-card>   
+</template>
